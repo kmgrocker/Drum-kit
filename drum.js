@@ -11,28 +11,6 @@ function play(e) {
   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
 
   composition.push(e.keyCode);
-  const playBtn = document.querySelector(".play");
-  const stopBtn = document.querySelector(".pause");
-  playBtn.addEventListener("click", playComp);
-  console.log(composition);
-  function playComp(e) {
-    let beat;
-    let count = 0;
-    composition.forEach(keyCode => {
-      console.log(keyCode);
-      beat = setInterval(() => {
-        if (count > 100) clearInterval(beat);
-        audio.play();
-        count++;
-      }, 500);
-    });
-    // setTimeout(() => {
-    //   clearInterval(beat);
-    // }, 3000);
-  }
-  stopBtn.addEventListener("click", () => {
-    location.reload();
-  });
 
   // eleminating other key which is not in our drum key
 
@@ -44,6 +22,28 @@ function play(e) {
 
   key.classList.add("playing");
 
+  const playBtn = document.querySelector(".play");
+  const stopBtn = document.querySelector(".pause");
+  playBtn.addEventListener("click", playComp);
+  // console.log(composition);
+  function playComp(e) {
+    let beat;
+    let count = 0;
+    composition.forEach(keyCode => {
+      const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+      if (!audio) return;
+      // console.log(keyCode);
+      beat = setInterval(() => {
+        if (count > 100) clearInterval(beat);
+        audio.play();
+        count++;
+      }, 500);
+    });
+    // setTimeout(() => {
+    //   clearInterval(beat);
+    // }, 3000);
+  }
+
   // firing the event when transition end
 
   const keys = document.querySelectorAll(".key"); //giv all our drum key in array
@@ -51,7 +51,9 @@ function play(e) {
   function removeTransition() {
     key.classList.remove("playing");
   }
+
+  //? stop button
+  stopBtn.addEventListener("click", () => {
+    location.reload();
+  });
 }
-
-
-
